@@ -20,38 +20,45 @@
 
             <ImageView
                 android:id="@+id/movieImageView"
-                android:layout_width="250sp"
+                android:layout_width="match_parent"
                 android:layout_height="330sp"
-                android:layout_marginTop="32dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_launcher_background"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="330sp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/bg_linear"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <Button
                 android:id="@+id/btn_play"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Video Trailers"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:background="@drawable/ic_button_play"
                 app:layout_constraintBottom_toBottomOf="@+id/movieImageView"
                 app:layout_constraintEnd_toEndOf="@+id/movieImageView"
-                app:layout_constraintHorizontal_bias="0.491"
                 app:layout_constraintStart_toStartOf="@+id/movieImageView"
                 app:layout_constraintTop_toTopOf="@+id/movieImageView"
-                app:layout_constraintVertical_bias="0.921" />
+                />
 
             <TextView
                 android:id="@+id/titleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:layout_marginStart="24dp"
                 android:gravity="center_horizontal"
-                android:text="Title"
+                android:text="@string/title_movie"
                 android:textColor="@color/white"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/movieImageView" />
 
@@ -59,9 +66,9 @@
                 android:id="@+id/releaseDateTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="21dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="24dp"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
@@ -69,9 +76,9 @@
                 android:id="@+id/runtimeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="21dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="24dp"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/releaseDateTextView" />
 
@@ -79,9 +86,9 @@
                 android:id="@+id/voteAverageTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="24dp"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/runtimeTextView" />
 
@@ -89,9 +96,9 @@
                 android:id="@+id/voteCountTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="24dp"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/voteAverageTextView" />
 
@@ -100,9 +107,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20sp"
-                android:layout_marginTop="17dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginTop="16dp"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/voteCountTextView" />
 
@@ -110,13 +118,12 @@
                 android:id="@+id/listCreditsTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center_horizontal"
-                android:text="Reviews"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="24dp"
+                android:text="@string/reviews"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/overviewTextView" />
 
@@ -124,7 +131,7 @@
                 android:id="@+id/reviewsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/listCreditsTextView" />
 
