@@ -7,7 +7,7 @@ import com.example.mymovieapp.network.responses.movies.MoviesResponse
 
 interface MoviesRepository {
 
-    suspend fun getPopularMovies() : MoviesResponse
+    suspend fun getPopularMovies(page:Int) : MoviesResponse
 
     suspend fun getMovieDetails(movieId : Int) : MovieDetailsResponse
 

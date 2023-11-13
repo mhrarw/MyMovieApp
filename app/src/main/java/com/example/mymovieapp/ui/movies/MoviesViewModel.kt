@@ -1,5 +1,6 @@
 package com.example.mymovieapp.ui.movies
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mymovieapp.models.Movie
@@ -30,24 +31,21 @@ class MoviesViewModel : ViewModel() {
                 isLoading = true
 
                 val response = withContext(Dispatchers.IO) {
-                    moviesRepository.getPopularMovies()
+                    moviesRepository.getPopularMovies(page = currentPage)
                 }
 
                 val moviesList = mutableListOf<Movie>()
                 for (i in response.results.indices) {
                     val movieId = response.results[i].id
 
-                    if (!loadedMovieIds.contains(movieId)) {
-                        moviesList.add(
-                            Movie(
-                                "https://image.tmdb.org/t/p/original" + response.results[i].backdrop_path,
-                                response.results[i].title,
-                                response.results[i].release_date,
-                                movieId
-                            )
+                    moviesList.add(
+                        Movie(
+                            "https://image.tmdb.org/t/p/original" + response.results[i].backdrop_path,
+                            response.results[i].title,
+                            response.results[i].release_date,
+                            movieId
                         )
-                        loadedMovieIds.add(movieId)
-                    }
+                    )
                 }
 
                 val existingMovies = (moviesStateFlowPublic.value as? UIStateMovies.Success)?.movies

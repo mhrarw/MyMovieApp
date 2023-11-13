@@ -12,11 +12,15 @@ import com.example.mymovieapp.R
 import com.example.mymovieapp.models.Movie
 
 class PopularMoviesListAdapter(
-    var context: Context, val click: (Int) -> Unit) : RecyclerView.Adapter<PopularMoviesListAdapter.ViewHolder>() {
+    var context: Context,
+    val click: (Int) -> Unit,
+    val loadMore: () -> Unit
+) : RecyclerView.Adapter<PopularMoviesListAdapter.ViewHolder>() {
 
-    var popularMoviesList: MutableList<Movie> = mutableListOf()
-    set(value) {
-        field = value
+    private val popularMoviesList: MutableList<Movie> = mutableListOf()
+
+    fun setMovies(movies: List<Movie>) {
+        popularMoviesList.addAll(movies)
         notifyDataSetChanged()
     }
 
@@ -31,6 +35,9 @@ class PopularMoviesListAdapter(
         holder.releaseDate.text = popularMoviesList[position].releaseDate
         holder.itemView.setOnClickListener {
             click.invoke(popularMoviesList[position].movieId)
+        }
+        if (position == itemCount - 1) {
+            loadMore.invoke()
         }
     }
 

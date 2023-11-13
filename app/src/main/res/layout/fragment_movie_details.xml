@@ -41,7 +41,7 @@
                 android:id="@+id/btn_play"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
-                android:background="@drawable/ic_button_play"
+                android:background="@drawable/ic_btn_play"
                 app:layout_constraintBottom_toBottomOf="@+id/movieImageView"
                 app:layout_constraintEnd_toEndOf="@+id/movieImageView"
                 app:layout_constraintStart_toStartOf="@+id/movieImageView"

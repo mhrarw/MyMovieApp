@@ -9,8 +9,10 @@
     tools:context=".ui.movies.MoviesFragment">
 
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/popularMoviesRecyclerView"
+        android:nestedScrollingEnabled="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

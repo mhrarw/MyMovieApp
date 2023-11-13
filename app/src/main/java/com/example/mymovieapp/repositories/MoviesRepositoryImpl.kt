@@ -9,7 +9,7 @@ import com.example.mymovieapp.network.responses.movies.MoviesResponse
 object MoviesRepositoryImpl : MoviesRepository {
     private val apiService = ApiProvider.apiService
 
-    override suspend fun getPopularMovies(): MoviesResponse {
+    override suspend fun getPopularMovies(page:Int): MoviesResponse {
         return apiService.getPopularMovies()
     }
 

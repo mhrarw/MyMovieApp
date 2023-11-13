@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovieapp.databinding.FragmentMoviesBinding
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -27,6 +29,7 @@ class MoviesFragment : Fragment() {
     ): View {
         binding = FragmentMoviesBinding.inflate(layoutInflater)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,9 +41,7 @@ class MoviesFragment : Fragment() {
                     Toast.makeText(requireContext(), "Data is loading", Toast.LENGTH_LONG).show()
                 }
                 is UIStateMovies.Success -> {
-                    popularMoviesListAdapter.popularMoviesList.clear()
-                    popularMoviesListAdapter.popularMoviesList.addAll(it.movies)
-                    popularMoviesListAdapter.notifyDataSetChanged()
+                    popularMoviesListAdapter.setMovies(it.movies)
                 }
                 is UIStateMovies.Error -> {
                     Toast.makeText(requireContext(), it.e.message, Toast.LENGTH_LONG).show()
@@ -48,18 +49,38 @@ class MoviesFragment : Fragment() {
             }
         }.launchIn(lifecycleScope)
 
-        popularMoviesListAdapter = PopularMoviesListAdapter(requireContext()){
-            val movieId = it
-            val action = MoviesFragmentDirections.actionMoviesFragmentToMovieDetailsFragment(movieId)
-            findNavController().navigate(action)
-        }
+        popularMoviesListAdapter = PopularMoviesListAdapter(requireContext(),
+            click = {
+                val movieId = it
+                val action = MoviesFragmentDirections.actionMoviesFragmentToMovieDetailsFragment(movieId)
+                findNavController().navigate(action)
+            },
+            loadMore = {
+                // Load more items callback
+                moviesViewModel.getPopularMovies()
+            }
+        )
 
         binding.popularMoviesRecyclerView.adapter = popularMoviesListAdapter
-        moviesViewModel.getPopularMovies()
         val gridLayoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
         binding.popularMoviesRecyclerView.layoutManager = gridLayoutManager
 
-        }
+        binding.popularMoviesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
 
+                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
+
+                if (visibleItemCount + firstVisibleItem >= totalItemCount && totalItemCount > 0) {
+                    // Load more items when reaching the end
+                    moviesViewModel.getPopularMovies()
+                }
+            }
+        })
+        moviesViewModel.getPopularMovies()
     }
+}
 
