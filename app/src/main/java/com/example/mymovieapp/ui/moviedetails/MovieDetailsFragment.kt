@@ -13,9 +13,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.mymovieapp.databinding.FragmentMovieDetailsBinding
-import com.example.mymovieapp.ui.moviecredits.MovieReviewAdapter
+import com.example.mymovieapp.ui.moviereview.MovieReviewAdapter
+import com.example.mymovieapp.ui.moviereview.MovieReviewViewModel
+import com.example.mymovieapp.ui.moviereview.UIStateMovieReview
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -24,6 +27,7 @@ class MovieDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentMovieDetailsBinding
     private lateinit var movieDetailsViewModel: MovieDetailsViewModel
+    private lateinit var movieReviewViewModel: MovieReviewViewModel
     private lateinit var movieReviewAdapter: MovieReviewAdapter
     private val args : MovieDetailsFragmentArgs by navArgs()
 
@@ -38,7 +42,11 @@ class MovieDetailsFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val movieId = arguments?.getInt("movieId") ?: 0
+
+        //view model
         movieDetailsViewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
+        movieReviewViewModel = ViewModelProvider(this)[MovieReviewViewModel::class.java]
         val viewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
 
         movieDetailsViewModel.movieDetailsStateFlowPublic.onEach {
@@ -62,10 +70,33 @@ class MovieDetailsFragment : Fragment() {
             }
         }.launchIn(lifecycleScope)
 
+        movieReviewViewModel.movieReviewStateFlowPublic.onEach {
+            when(it){
+                is UIStateMovieReview.Loading ->{
+                    Toast.makeText(requireContext(), "Data is loading", Toast.LENGTH_LONG).show()
+                }
+                is UIStateMovieReview.Success ->{
+                    movieReviewAdapter.setData(it.movieReviews)
+                }
+                is UIStateMovieReview.Error ->{
+                    Toast.makeText(requireContext(),it.e.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }.launchIn(lifecycleScope)
 
+        movieReviewAdapter = MovieReviewAdapter(emptyList()){ selectedReview ->
+            //click on a review if needed
+        }
+        binding.reviewsRecyclerView.adapter = movieReviewAdapter
+        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.reviewsRecyclerView.layoutManager = layoutManager
+
+        // fetch user review
+        movieReviewViewModel.getUserReviews(args.movieId)
+
+        // fetch movie detail
         movieDetailsViewModel.getPopularMovies(args.movieId)
 
-        val movieId = arguments?.getInt("movieId") ?: 0
         viewModel.videoTrailer.observe(viewLifecycleOwner, Observer { videoTrailer ->
             val trailerKey = videoTrailer.results.firstOrNull()?.key
             if (!trailerKey.isNullOrBlank()) {
@@ -86,7 +117,4 @@ class MovieDetailsFragment : Fragment() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=$trailerKey"))
         startActivity(intent)
     }
-
-
-
 }

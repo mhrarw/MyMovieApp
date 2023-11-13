@@ -1,4 +1,4 @@
-package com.example.mymovieapp.ui.moviecredits
+package com.example.mymovieapp.ui.moviereview
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,18 +8,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovieapp.R
 import com.example.mymovieapp.network.responses.movieDetails.ResultUser
 
-class MovieReviewAdapter(private val reviews: List<ResultUser>) :
+class MovieReviewAdapter(private var reviews: List<ResultUser>, private val itemClickListener: ((ResultUser) -> Unit)? = null) :
     RecyclerView.Adapter<MovieReviewAdapter.ReviewViewHolder>() {
 
+    fun setData(newReviews: List<ResultUser>) {
+        reviews = newReviews
+        notifyDataSetChanged()
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.movie_reviews_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.movie_reviews_item, parent, false)
         return ReviewViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         val review = reviews[position]
         holder.bind(review)
+
+        holder.itemView.setOnClickListener {
+            itemClickListener?.invoke(review)
+        }
     }
 
     override fun getItemCount(): Int {
